@@ -29,13 +29,19 @@ const ConversationList = () => {
         </div>
       </div>
       <div className="flex-1 pt-3 p-5 overflow-y-auto">
-        <div className="flex items-center gap-2 pt-5 border-b pb-2">
-          <HiUserCircle size={25} />
-          <h2 className="text-md">Jhon Doe</h2>
+        <div className="flex items-center gap-5 pt-5 border-b pb-2">
+          <HiUserCircle size={30} />
+          <div className="flex flex-col gap-1">
+            <h2 className="text-md">Jhon Doe</h2>
+            <span className="text-xs">Hello</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2 pt-5 border-b pb-2">
-          <HiUserCircle size={25} />
-          <h2 className="text-md">Jhon Doe</h2>
+        <div className="flex items-center gap-5 pt-5 border-b pb-2">
+          <HiUserCircle size={30} />
+          <div className="flex flex-col gap-1">
+            <h2 className="text-md">Jhon Doe</h2>
+            <span className="text-xs">Hello</span>
+          </div>
         </div>
       </div>
     </>
