@@ -1,6 +1,6 @@
 import ChatBarConversation from "./ChatBarConversation";
 import ChatBarFooter from "./ChatBarFooter";
-import ChatBarHeader from "./ChatbarHeader";
+import ChatBarHeader from "./ChatBarHeader";
 
 const Chat = () => {
   return (
