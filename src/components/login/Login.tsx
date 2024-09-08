@@ -1,31 +1,40 @@
+import { Button } from "../ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../ui/card";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
+
 const Login = () => {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
-      <div className="flex flex-col w-[30%] p-[2rem] border">
-        <form action="" className="flex flex-col  gap-5">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="email">Email</label>
-            <input
-              type="text"
-              placeholder="Email"
-              name="email"
-              className="p-[0.5rem] w-full border rounded-lg outline-none"
-            />
+      <Card className="w-full max-w-sm">
+        <CardHeader>
+          <CardTitle className="text-2xl">Login</CardTitle>
+        </CardHeader>
+        <CardContent className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" placeholder="Email" required />
           </div>
-          
-          <div className="flex flex-col gap-2">
-            <label htmlFor="password">Password</label>
-            <input
+          <div className="grid gap-2">
+            <Label htmlFor="password">Password</Label>
+            <Input
+              id="password"
               type="password"
               placeholder="Password"
-              name="password"
-              className="p-[0.5rem] w-full border rounded-lg outline-none"
+              required
             />
           </div>
-
-          <button>Sign In</button>
-        </form>
-      </div>
+        </CardContent>
+        <CardFooter>
+          <Button className="w-full">Sign in</Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 };
