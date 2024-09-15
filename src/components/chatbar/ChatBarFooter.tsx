@@ -2,8 +2,8 @@ import { RiSendPlane2Fill } from "react-icons/ri";
 
 const ChatBarFooter = () => {
   return (
-    <div className="p-5 border-t">
-      <div className="w-full border  rounded-2xl flex items-center justify-between p-2 ">
+    <div className="px-24 py-8 border-t">
+      <div className="w-full border  rounded-2xl flex items-center justify-between p-3 ">
         <input
           type="text"
           placeholder="Type a message"

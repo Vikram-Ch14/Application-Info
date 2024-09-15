@@ -9,11 +9,11 @@ function App() {
 
   return (
     <div className="w-full h-screen flex">
-      {isUserLogin ? (
+      {!isUserLogin ? (
         <>
           <Sidebar />
           <Chat />
-          <Details />
+          {/* <Details /> */}
         </>
       ) : (
         <Login />
