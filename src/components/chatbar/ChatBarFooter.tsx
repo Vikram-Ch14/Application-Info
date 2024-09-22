@@ -6,7 +6,7 @@ const ChatBarFooter = () => {
       <div className="w-full border  rounded-2xl flex items-center justify-between p-3 ">
         <input
           type="text"
-          placeholder="Type a message"
+          placeholder="Type a message..."
           className="border-none outline-none w-full gap-2 flex items-center pl-1 "
         />
         <div className="pl-3">

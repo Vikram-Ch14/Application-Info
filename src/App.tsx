@@ -1,6 +1,5 @@
 import "./App.css";
 import Chat from "./components/chatbar/Chat";
-import Details from "./components/details/Details";
 import Login from "./components/login/Login";
 import Sidebar from "./components/sidebar/Sidebar";
 
