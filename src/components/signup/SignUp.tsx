@@ -1,3 +1,10 @@
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,20 +15,80 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import {
+  createUser,
+  createUserChats,
+  storeUserData,
+} from "@/service/HttpService";
+import { UserDetails } from "./types";
 
-type UserDetails = {
-  userName: string;
-  email: string;
-  password: string;
+type SignUpProps = {
+  setIsUserExist: Dispatch<SetStateAction<boolean>>;
 };
 
-const SignUp = () => {
-  const [userDetails, setUserDetails] = useState<UserDetails>();
+const SignUp = ({ setIsUserExist }: SignUpProps) => {
+  const [userDetails, setUserDetails] = useState<UserDetails>({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [userId, setUserId] = useState<string>("");
+
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e?.target;
+    setUserDetails((prevDetails: UserDetails) => {
+      return {
+        ...prevDetails,
+        [name]: value,
+      };
+    });
+  };
+
+  const handleCreate = async () => {
+    const { email, password } = userDetails;
+    if (!email?.length || !password?.length) return;
+    try {
+      const user = await createUser(email, password);
+      setUserId(user?.user?.uid);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleLogin = () => {
+    setIsUserExist(true);
+  };
+
+  useEffect(() => {
+    if (!userId?.length) return;
+
+    const { username, email } = userDetails;
+    const postUserData = async (userId: string) => {
+      try {
+        await storeUserData(userId, username, email);
+
+        await createUserChats(userId);
+
+        setUserDetails((prev: UserDetails) => {
+          return {
+            ...prev,
+            email: "",
+            username: "",
+            password: "",
+          };
+        });
+        setUserId("");
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    postUserData(userId);
+  }, [userId]);
 
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
-      <Card className="mx-auto max-w-screen-md">
+      <Card className="w-96 max-w-screen-md">
         <CardHeader>
           <CardTitle className="text-xl">Sign Up</CardTitle>
           <CardDescription>
@@ -31,14 +98,17 @@ const SignUp = () => {
 
         <CardContent>
           <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="first-name">First name</Label>
-                <Input id="first-name" placeholder="Max" required />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="last-name">Last name</Label>
-                <Input id="last-name" placeholder="Robinson" required />
+                <Label htmlFor="first-name">User Name</Label>
+                <Input
+                  id="first-name"
+                  placeholder="UserName"
+                  required
+                  name="username"
+                  value={userDetails?.username}
+                  onChange={onChange}
+                />
               </div>
             </div>
             <div className="grid gap-2">
@@ -46,21 +116,33 @@ const SignUp = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="m@example.com"
+                placeholder="Email"
                 required
+                name="email"
+                value={userDetails?.email}
+                onChange={onChange}
               />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" />
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="password"
+                value={userDetails?.password}
+                onChange={onChange}
+              />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={handleCreate}>
               Create an account
             </Button>
           </div>
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
-            <span className="cursor-pointer">Sign In</span>
+            <span className="cursor-pointer" onClick={handleLogin}>
+              Sign In
+            </span>
           </div>
         </CardContent>
       </Card>

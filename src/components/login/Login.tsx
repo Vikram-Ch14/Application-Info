@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -9,7 +10,15 @@ import {
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
-const Login = () => {
+type LoginProps = {
+  setIsUserExist: Dispatch<SetStateAction<boolean>>;
+};
+
+const Login = ({ setIsUserExist }: LoginProps) => {
+  const handleCreate = () => {
+    setIsUserExist(false);
+  };
+
   return (
     <div className="h-full w-full flex flex-col items-center justify-center">
       <Card className="w-full max-w-sm">
@@ -23,16 +32,23 @@ const Login = () => {
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" placeholder="Password" required />
+            <Input
+              id="password"
+              type="password"
+              placeholder="Password"
+              required
+            />
           </div>
         </CardContent>
         <CardFooter>
           <Button className="w-full">Sign in</Button>
         </CardFooter>
         <div className="m-2 text-center text-sm">
-           Don't have an account? <span className="cursor-pointer">Sign up</span>
-          </div>
-        
+          Don't have an account?{" "}
+          <span className="cursor-pointer" onClick={handleCreate}>
+            Sign up
+          </span>
+        </div>
       </Card>
     </div>
   );
