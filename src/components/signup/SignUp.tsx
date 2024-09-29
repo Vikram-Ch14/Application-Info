@@ -23,10 +23,10 @@ import {
 import { UserDetails } from "./types";
 
 type SignUpProps = {
-  setIsUserExist: Dispatch<SetStateAction<boolean>>;
+  setShowLoginPage: Dispatch<SetStateAction<boolean>>;
 };
 
-const SignUp = ({ setIsUserExist }: SignUpProps) => {
+const SignUp = ({ setShowLoginPage }: SignUpProps) => {
   const [userDetails, setUserDetails] = useState<UserDetails>({
     username: "",
     email: "",
@@ -56,7 +56,7 @@ const SignUp = ({ setIsUserExist }: SignUpProps) => {
   };
 
   const handleLogin = () => {
-    setIsUserExist(true);
+    setShowLoginPage(true);
   };
 
   useEffect(() => {

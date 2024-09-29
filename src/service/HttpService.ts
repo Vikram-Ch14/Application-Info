@@ -1,7 +1,11 @@
 import { authStore } from "@/lib/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/lib/firebaseConfig";
+import { UserData } from "@/store/AuthStore";
 
 export const createUser = async (email: string, password: string) => {
   const response = await createUserWithEmailAndPassword(
@@ -12,12 +16,16 @@ export const createUser = async (email: string, password: string) => {
   return response;
 };
 
+export const userSignIn = async (email: string, password: string) => {
+  const response = await signInWithEmailAndPassword(authStore, email, password);
+  return response;
+};
+
 export const storeUserData = async (
   userId: string,
   username: string,
   email: string
 ) => {
-  console.log("userId", userId, username, email);
   await setDoc(doc(db, "users", userId), {
     username,
     email,
@@ -30,4 +38,13 @@ export const createUserChats = async (userId: string) => {
   await setDoc(doc(db, "userchats", userId), {
     chats: [],
   });
+};
+
+export const fetchUserInfo = async (userId: string) => {
+  const docRef = doc(db, "users", userId);
+  const docSnap = await getDoc(docRef);
+  if (docSnap?.exists()) {
+    return docSnap?.data() as UserData;
+  }
+  return null;
 };
