@@ -9,39 +9,36 @@ import { fetchUserInfo } from "./service/HttpService";
 import { useAuthStore } from "./store/AuthStore";
 import "./App.css";
 
-
 function App() {
-  const isUserLogin = false;
   const [showLoginPage, setShowLoginPage] = useState<boolean>(true);
-  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const currentUser = useAuthStore((state) => state.currentUser);
+  const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
 
   useEffect(() => {
+    setIsLoading(true);
     const unsubscribe = onAuthStateChanged(authStore, async (user) => {
-      try {
-        const userId = user?.uid;
-        const userInfo = await fetchUserInfo(userId!);
+      if (user) {
+        const userInfo = await fetchUserInfo(user?.uid!);
         if (userInfo) {
           setCurrentUser(userInfo);
         }
-      } catch (e) {
-        console.error(e);
-        setCurrentUser(null);
       }
     });
+    setIsLoading(false);
     return () => {
       unsubscribe();
     };
-  }, []);
-
-  console.log("currentUser", currentUser);
+  }, [fetchUserInfo]);
+  if (isLoading) return;
 
   return (
     <div className="w-full h-screen flex">
-      {!isUserLogin ? (
+      {currentUser?.id ? (
         <>
           <Sidebar />
           <Chat />
+          {/* <Details/> */}
         </>
       ) : showLoginPage ? (
         <Login setShowLoginPage={setShowLoginPage} />

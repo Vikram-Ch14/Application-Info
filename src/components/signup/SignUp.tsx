@@ -21,6 +21,7 @@ import {
   storeUserData,
 } from "@/service/HttpService";
 import { UserDetails } from "./types";
+import { Loader2 } from "lucide-react";
 
 type SignUpProps = {
   setShowLoginPage: Dispatch<SetStateAction<boolean>>;
@@ -33,6 +34,7 @@ const SignUp = ({ setShowLoginPage }: SignUpProps) => {
     password: "",
   });
   const [userId, setUserId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e?.target;
@@ -47,10 +49,12 @@ const SignUp = ({ setShowLoginPage }: SignUpProps) => {
   const handleCreate = async () => {
     const { email, password } = userDetails;
     if (!email?.length || !password?.length) return;
+    setIsLoading(true);
     try {
       const user = await createUser(email, password);
       setUserId(user?.user?.uid);
     } catch (e) {
+      setIsLoading(false);
       console.error(e);
     }
   };
@@ -68,7 +72,8 @@ const SignUp = ({ setShowLoginPage }: SignUpProps) => {
         await storeUserData(userId, username, email);
 
         await createUserChats(userId);
-
+        setShowLoginPage(true);
+        setIsLoading(false);
         setUserDetails((prev: UserDetails) => {
           return {
             ...prev,
@@ -79,6 +84,7 @@ const SignUp = ({ setShowLoginPage }: SignUpProps) => {
         });
         setUserId("");
       } catch (e) {
+        setIsLoading(false);
         console.error(e);
       }
     };
@@ -134,7 +140,13 @@ const SignUp = ({ setShowLoginPage }: SignUpProps) => {
                 onChange={onChange}
               />
             </div>
-            <Button type="submit" className="w-full" onClick={handleCreate}>
+            <Button
+              type="submit"
+              className="w-full"
+              onClick={handleCreate}
+              disabled={isLoading}
+            >
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Create an account
             </Button>
           </div>

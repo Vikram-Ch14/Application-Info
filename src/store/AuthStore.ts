@@ -7,6 +7,10 @@ export type UserData = {
   blocked: string[];
 };
 
+export type UserChats = {
+  chats: string[];
+};
+
 export type AuthStore = {
   currentUser: UserData | null;
   setCurrentUser: (currentUser: UserData | null) => void;

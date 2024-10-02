@@ -11,6 +11,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { UserDetails } from "./types";
 import { userSignIn } from "@/service/HttpService";
+import { Loader2 } from "lucide-react";
 
 type LoginProps = {
   setShowLoginPage: Dispatch<SetStateAction<boolean>>;
@@ -21,6 +22,7 @@ const Login = ({ setShowLoginPage }: LoginProps) => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e?.target;
@@ -35,9 +37,12 @@ const Login = ({ setShowLoginPage }: LoginProps) => {
   const handleSignIn = async () => {
     const { email, password } = userDetails;
     if (!email?.length || !password?.length) return;
+    setIsLoading(true);
     try {
-      await userSignIn(email, password);
-
+      const response = await userSignIn(email, password);
+      if (response?.user?.uid) {
+      }
+      setIsLoading(false);
       setUserDetails((prev: UserDetails) => {
         return {
           ...prev,
@@ -46,6 +51,7 @@ const Login = ({ setShowLoginPage }: LoginProps) => {
         };
       });
     } catch (e) {
+      setIsLoading(false);
       console.error(e);
     }
   };
@@ -87,7 +93,12 @@ const Login = ({ setShowLoginPage }: LoginProps) => {
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={handleSignIn}>
+          <Button
+            className="w-full"
+            onClick={handleSignIn}
+            disabled={isLoading}
+          >
+            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Sign in
           </Button>
         </CardFooter>
