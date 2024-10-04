@@ -35,21 +35,11 @@ const Login = ({ setShowLoginPage }: LoginProps) => {
   };
 
   const handleSignIn = async () => {
+    setIsLoading(true);
     const { email, password } = userDetails;
     if (!email?.length || !password?.length) return;
-    setIsLoading(true);
     try {
-      const response = await userSignIn(email, password);
-      if (response?.user?.uid) {
-      }
-      setIsLoading(false);
-      setUserDetails((prev: UserDetails) => {
-        return {
-          ...prev,
-          email: "",
-          password: "",
-        };
-      });
+      await userSignIn(email, password);
     } catch (e) {
       setIsLoading(false);
       console.error(e);

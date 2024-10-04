@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import Chat from "./components/chatbar/Chat";
 import Login from "./components/login/Login";
 import Sidebar from "./components/sidebar/Sidebar";
@@ -15,7 +15,7 @@ function App() {
   const currentUser = useAuthStore((state) => state.currentUser);
   const setCurrentUser = useAuthStore((state) => state.setCurrentUser);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setIsLoading(true);
     const unsubscribe = onAuthStateChanged(authStore, async (user) => {
       if (user) {
@@ -24,12 +24,13 @@ function App() {
           setCurrentUser(userInfo);
         }
       }
+      setIsLoading(false);
     });
-    setIsLoading(false);
     return () => {
       unsubscribe();
     };
   }, [fetchUserInfo]);
+
   if (isLoading) return;
 
   return (
